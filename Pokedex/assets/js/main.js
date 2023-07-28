@@ -4,13 +4,15 @@ const nextButton = document.getElementById('next');
 const backButton = document.getElementById('back');
 const limit = 20
 let offset = 0;
+const maxRecords = 151  
+const minRecords = -20
 
 function loadPokemon(offset, limit){
     // Convert the structure into HTML <li>
     function convertPokemonLi(pokemon) {
         return `
         <li class="pokemon ${pokemon.type}">
-            <span class="number">${pokemon.number.toString().padStart(4, '0')}</span>
+            <span class="number">#${pokemon.number}</span>
             <span class="name">${pokemon.name}</span>
             <div class="detail">
                 <ol class="types">
@@ -27,7 +29,6 @@ function loadPokemon(offset, limit){
         pokemonList.innerHTML += pokemons.map(convertPokemonLi).join(''); //need empty string
         }); 
     }
-
 loadPokemon(offset, limit);
 
 /*
@@ -50,14 +51,28 @@ loadPokemon(offset, limit);
      */
 nextButton.addEventListener('click', () => {
     offset += limit;
-    loadPokemon(offset, limit);
-    clearPage(); // Limpa a página após o avanço
+    const qtdRecords = offset +limit;
+    if(qtdRecords >= maxRecords){ //Hidden Button if reach condition
+        const newLimit = maxRecords - offset;
+        loadPokemon(offset, newLimit);
+        nextButton.style.display = 'none';
+    } else {
+        loadPokemon(offset, limit);
+    }
+    backButton.style.display = 'inline-block';
+    clearPage(); // Clear the page after next button click
 });
 
 backButton.addEventListener('click', () => {
     offset -= limit;
-    loadPokemon(offset, limit);
-    clearPage(); // Limpa a página após o recuo
+    if (offset <= minRecords) { //Hidden Button if reach condition
+        offset = minRecords;
+        backButton.style.display = 'none'
+    } else{
+        loadPokemon(offset, limit);
+    }
+    nextButton.style.display = 'inline-block';
+    clearPage();  // Clear the page after back button click
 });
 
 function clearPage() {
