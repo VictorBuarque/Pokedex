@@ -2,12 +2,12 @@
 const pokemonList = document.getElementById('pokemonList');
 const nextButton = document.getElementById('next');
 const backButton = document.getElementById('back');
-const limit = 20
+const limit = 1
 let offset = 0;
 const maxRecords = 151  
 const minRecords = -20
 
-function loadPokemon(offset, limit){
+function loadAbilities(offset, limit){
     // Convert the structure into HTML <li>
     function convertPokemonLi(pokemon) {
         return `
@@ -17,9 +17,15 @@ function loadPokemon(offset, limit){
             <div class="detail">
                 <ol class="types">
                     ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join(' ')}
-                    <a class= "name"href=ability.html>Abilities</a>
+                    
                 </ol>
                 <img src="${pokemon.photo}" alt="${pokemon.name}">
+            </div>
+            <div class="description">
+                <h3>Habilidades:</h3>
+                <ol class="ability">
+                    ${pokemon.abilities.map((ability) => `<li class="type ${ability}">${ability}</li>`).join(' ')}
+                </ol>
             </div>
         </li>
         `;
@@ -30,35 +36,17 @@ function loadPokemon(offset, limit){
         pokemonList.innerHTML += pokemons.map(convertPokemonLi).join(''); //need empty string
         }); 
     }
-loadPokemon(offset, limit);
+loadAbilities(offset, limit);
 
-/*
-     Função original:
-
-     const listItems = [];
-     for (let i = 0; i < pokemons.length; i++) {
-        const pokemon = pokemons[i];
-        listItems.push(convertPokemonLi(pokemon));
-     };
-
-     A mesma função com menos verbosidade sem simplificar:
-
-     pokeApi.getPokemons().then(( pokemons = [] ) => {
-        const newList = pokemons.map((pokemon)) => {
-            return convertPokemonLi(pokemon);
-        });
-     const newHTML = newList.join('');
-     pokemonList.innerHTML += newHTML;    
-     */
 nextButton.addEventListener('click', () => {
     offset += limit;
     const qtdRecords = offset +limit;
     if(qtdRecords >= maxRecords){ //Hidden Button if reach condition
         const newLimit = maxRecords - offset;
-        loadPokemon(offset, newLimit);
+        loadAbilities(offset, newLimit);
         nextButton.style.display = 'none';
     } else {
-        loadPokemon(offset, limit);
+        loadAbilities(offset, limit);
     }
     backButton.style.display = 'inline-block';
     clearPage(); // Clear the page after next button click
@@ -70,7 +58,7 @@ backButton.addEventListener('click', () => {
         offset = minRecords;
         backButton.style.display = 'none'
     } else{
-        loadPokemon(offset, limit);
+        loadAbilities(offset, limit);
     }
     nextButton.style.display = 'inline-block';
     clearPage();  // Clear the page after back button click
@@ -80,16 +68,3 @@ function clearPage() {
     const pokemonList = document.getElementById('pokemonList');
     pokemonList.innerHTML = ''; // Limpa o conteúdo da lista de Pokémon
 }
-// Função para redirecionar para a página de detalhes do Pokémon
-function redirectToDetailPage(pokemonName) {
-    window.location.href = `detail.html?name=${encodeURIComponent(pokemonName)}`;
-}
-
-// Evento de clique em um Pokémon da lista
-pokemonList.addEventListener('click', (event) => {
-    const clickedPokemon = event.target.closest('.pokemon');
-    if (clickedPokemon) {
-        const pokemonName = clickedPokemon.dataset.name;
-        redirectToDetailPage(pokemonName);
-    }
-});

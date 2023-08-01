@@ -2,19 +2,30 @@
 // Creating a object
 const pokeApi = {};
 // Creating a use model for api
-function convertApiDetailToPokemon(pokeDetail){
+function convertApiDetailToPokemon(pokeDetail) {
     const pokemon = new Pokemon();
     pokemon.number = pokeDetail.id;
     pokemon.name = pokeDetail.name;
-
+  
     const types = pokeDetail.types.map((typeSlot) => typeSlot.type.name);
-    const [type] = types; //Destructure type
-
+    const [type] = types;
     pokemon.types = types;
     pokemon.type = type;
 
+    const abilities = pokeDetail.abilities.map((abilitySlot) => abilitySlot.ability.name);
+    const [ability] = abilities;
+    pokemon.abilities = abilities;
+    pokemon.ability = ability;
+    
+  
     pokemon.photo = pokeDetail.sprites.other.dream_world.front_default;
-
+  
+    // Getting moves
+    const moves = pokeDetail.moves.map((moveSlot) => moveSlot.move.name);
+    const [move] = moves;
+    pokemon.move = move;
+    pokemon.moves = moves;
+  
     return pokemon;
 }
 // Get Details of pokemon
