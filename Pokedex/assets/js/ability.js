@@ -1,13 +1,15 @@
 //Creating variables to call functions and methods
-const pokemonList = document.getElementById('pokemonList');
+const abilityList = document.getElementById('pokemons2');
+const urlParams = new URLSearchParams(window.location.search);
+const pokemonName = urlParams.get('name');
 const nextButton = document.getElementById('next');
 const backButton = document.getElementById('back');
 const limit = 1
 let offset = 0;
 const maxRecords = 151  
-const minRecords = -20
+const minRecords = 0
 
-function loadAbilities(offset, limit){
+function loadAbilities(pokemonName){
     // Convert the structure into HTML <li>
     function convertPokemonLi(pokemon) {
         return `
@@ -25,18 +27,26 @@ function loadAbilities(offset, limit){
                 <h3>Habilidades:</h3>
                 <ol class="ability">
                     ${pokemon.abilities.map((ability) => `<li class="type ${ability}">${ability}</li>`).join(' ')}
-                </ol>
+                </ol>    
             </div>
         </li>
         `;
     }
-    //Calling pokeApi getPokemon()
-    pokeApi.getPokemons(offset, limit).then(( pokemons = [] ) => {
-        //Edit HTTP, Transform pokemons results in <li> in HTML and Concatenate this string with a empty space
-        pokemonList.innerHTML += pokemons.map(convertPokemonLi).join(''); //need empty string
-        }); 
-    }
-loadAbilities(offset, limit);
+//Calling pokeApi getPokemonDetail()
+    // Fetch the details of a specific Pokémon using its name
+    pokeApi.getPokemonDetail({ url: `https://pokeapi.co/api/v2/pokemon/${pokemonName}` })
+        .then(pokemon => {
+            // Convert the structure into HTML
+            const pokemonHTML = convertPokemonLi(pokemon);
+            pokemonList.innerHTML = pokemonHTML;
+        })
+        .catch(error => {
+            console.error(error);
+            pokemonList.innerHTML = '<p>Error loading Pokémon abilities.</p>';
+        });
+}
+ 
+loadAbilities(pokemonName);
 
 nextButton.addEventListener('click', () => {
     offset += limit;
@@ -52,17 +62,6 @@ nextButton.addEventListener('click', () => {
     clearPage(); // Clear the page after next button click
 });
 
-backButton.addEventListener('click', () => {
-    offset -= limit;
-    if (offset <= minRecords) { //Hidden Button if reach condition
-        offset = minRecords;
-        backButton.style.display = 'none'
-    } else{
-        loadAbilities(offset, limit);
-    }
-    nextButton.style.display = 'inline-block';
-    clearPage();  // Clear the page after back button click
-});
 
 function clearPage() {
     const pokemonList = document.getElementById('pokemonList');

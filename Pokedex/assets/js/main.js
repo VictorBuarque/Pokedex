@@ -5,7 +5,7 @@ const backButton = document.getElementById('back');
 const limit = 20
 let offset = 0;
 const maxRecords = 151  
-const minRecords = -20
+const minRecords = 0
 
 function loadPokemon(offset, limit){
     // Convert the structure into HTML <li>
@@ -17,7 +17,7 @@ function loadPokemon(offset, limit){
             <div class="detail">
                 <ol class="types">
                     ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join(' ')}
-                    <a class= "name"href=ability.html>Abilities</a>
+                    <a class="name" href="ability.html?name=${encodeURIComponent(pokemon.name)}">Abilities</a>
                 </ol>
                 <img src="${pokemon.photo}" alt="${pokemon.name}">
             </div>
@@ -55,8 +55,10 @@ nextButton.addEventListener('click', () => {
     const qtdRecords = offset +limit;
     if(qtdRecords >= maxRecords){ //Hidden Button if reach condition
         const newLimit = maxRecords - offset;
+        
         loadPokemon(offset, newLimit);
         nextButton.style.display = 'none';
+        nextButton.setAttribute('hidden')
     } else {
         loadPokemon(offset, limit);
     }
@@ -68,9 +70,12 @@ backButton.addEventListener('click', () => {
     offset -= limit;
     if (offset <= minRecords) { //Hidden Button if reach condition
         offset = minRecords;
+        loadPokemon(offset, minRecords);
+        backButton.setAttribute('hidden','disabled');
         backButton.style.display = 'none'
     } else{
         loadPokemon(offset, limit);
+        backButton.removeAttribute('hidden');
     }
     nextButton.style.display = 'inline-block';
     clearPage();  // Clear the page after back button click
@@ -80,16 +85,3 @@ function clearPage() {
     const pokemonList = document.getElementById('pokemonList');
     pokemonList.innerHTML = ''; // Limpa o conteúdo da lista de Pokémon
 }
-// Função para redirecionar para a página de detalhes do Pokémon
-function redirectToDetailPage(pokemonName) {
-    window.location.href = `detail.html?name=${encodeURIComponent(pokemonName)}`;
-}
-
-// Evento de clique em um Pokémon da lista
-pokemonList.addEventListener('click', (event) => {
-    const clickedPokemon = event.target.closest('.pokemon');
-    if (clickedPokemon) {
-        const pokemonName = clickedPokemon.dataset.name;
-        redirectToDetailPage(pokemonName);
-    }
-});

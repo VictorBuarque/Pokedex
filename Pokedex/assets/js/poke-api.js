@@ -20,11 +20,11 @@ function convertApiDetailToPokemon(pokeDetail) {
   
     pokemon.photo = pokeDetail.sprites.other.dream_world.front_default;
   
-    // Getting moves
-    const moves = pokeDetail.moves.map((moveSlot) => moveSlot.move.name);
-    const [move] = moves;
-    pokemon.move = move;
-    pokemon.moves = moves;
+    // // Getting moves
+    // const moves = pokeDetail.moves.map((moveSlot) => moveSlot.move.name);
+    // const [move] = moves;
+    // pokemon.move = move;
+    // pokemon.moves = moves;
   
     return pokemon;
 }

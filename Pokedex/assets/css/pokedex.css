@@ -10,11 +10,11 @@
     margin: 0;
     padding: 0;
     display: flex;
-    flex-wrap: wrap; /* Adicione flex-wrap para que os elementos sejam distribuídos em várias linhas */
-    justify-content: center; /* Centraliza horizontalmente os elementos filhos */
-    align-items: center; /* Centraliza verticalmente os elementos filhos */
-    min-height: 50vh;  /* Garante que o elemento pai ocupe toda a altura da janela do navegador */
-    width: 100%; /* Garante que o elemento pai ocupe toda a altura da janela do navegador */
+    flex-wrap: wrap; 
+    justify-content: center;
+    align-items: center; 
+    min-height: 50vh;  
+    width: 100%; 
   }
 .normal {
     background-color: #a6a877;
@@ -183,11 +183,11 @@
 }
 @media screen and (min-width:576px){
     .pokemons{
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
     
 }@media screen and (min-width:992px){
-    .pokemons2{
+    .pokemons{
         grid-template-columns: 1fr 1fr 1fr 1fr;
     } 
 }

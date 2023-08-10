@@ -6,6 +6,4 @@ class Pokemon{
     photo;
     ability;
     ability = [];
-    move;
-    move = [];
 }
